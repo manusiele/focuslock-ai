@@ -2,5 +2,6 @@ requests==2.31.0
 chromadb==0.4.24
 ollama==0.1.7
 sentence-transformers==3.0.1
+numpy==1.26.4
 torch==2.1.2  # For embeddings
 python-dotenv==1.0.0
