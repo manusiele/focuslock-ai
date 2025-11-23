@@ -57,18 +57,23 @@ Docs & Links →
 • [name] → [url]
 Why now → [1 savage sentence]
 Potential → [real KSh, users, gigs, stars]"""
-
+    
     response = ollama.generate(model=MODEL, prompt=prompt)
     return response["response"]
 
 def send_telegram(message: str):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-    payload = {"chat_id": CHAT_ID, "text": message, "parse_mode": "Markdown", "disable_web_page_preview": True}
+    payload = {
+        "chat_id": CHAT_ID,
+        "text": message,
+        "parse_mode": "Markdown",
+        "disable_web_page_preview": True
+    }
     try:
         requests.post(url, data=payload, timeout=10)
-        print("Ping sent")
+        print("✅ Ping sent")
     except Exception as e:
-        print(f"Telegram failed: {e}")
+        print(f"❌ Telegram failed: {e}")
 
 if __name__ == "__main__":
     idea = generate_idea()
