@@ -9,13 +9,11 @@ load_dotenv()
 
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
-MODEL = "phi3:mini"
+MODEL = "phi3:mini"  # or "llama3.2", "gemma2", etc.
 
-# Simple persistent history
+# Persistent history
 os.makedirs("data", exist_ok=True)
 HISTORY_FILE = "data/history.json"
-
-# Remove the unused embedding function initialization that was on line 19
 
 if os.path.exists(HISTORY_FILE):
     with open(HISTORY_FILE, "r") as f:
@@ -24,7 +22,8 @@ else:
     history = [
         "Building real apps from PC only — no Termux ever",
         "Obsessed with clean deploys: Vercel, Railway, Render, Fly.io",
-        "Wants project name + exact stack + useful links only"
+        "Wants project name + exact stack + useful links only",
+        "Every idea must start with a sharp Problem Statement"
     ]
 
 def log_activity(text: str):
@@ -34,32 +33,33 @@ def log_activity(text: str):
         json.dump(history, f, indent=2)
 
 def get_context() -> str:
-    return "\n".join(history[-7:]) if history else "Fresh PC warrior."
+    return "\n".join(history[-8:]) if history else "Fresh PC warrior."
 
 def generate_idea() -> str:
     context = get_context()
-    prompt = f"""You are FocusLock — elite, no-BS AI co-pilot for a Kenyan dev building from PC only.
+    prompt = f"""You are FocusLock — elite, no-fluff AI co-pilot for a Kenyan dev building real apps from PC only.
 
 Recent vibe:
 {context}
 
-Give exactly ONE real-world project that:
-• Is built and deployed from Windows/Linux/macOS laptop
-• Goes live on Vercel, Render, Railway, Fly.io, Northflank, etc.
-• Can be shipped in one focused session (2–8 hours)
-• Has actual money or portfolio value
+Generate exactly ONE focused project idea with this EXACT format (no extra text, no greetings):
 
-Format ONLY (no extra words, no commands):
-Project → [badass name]
-Stack → [exact tools + frameworks]
-Deploy → [one platform]
+PROBLEM STATEMENT
+Who → [exact audience, e.g. Kenyan freelancers, junior devs in Nairobi]
+Pain → [the real struggle they face daily]
+Gap → [what's missing in the market right now]
+Impact if unsolved → [career, money, or time lost]
+
+Project → [badass, memorable name]
+Stack → [exact tools only, e.g. Next.js + Supabase + Vercel]
+Deploy → [one platform: Vercel / Railway / Render / Fly.io / Northflank]
 Docs & Links →
-• [name] → [url]
-• [name] → [url]
-• [name] → [url]
-Why now → [1 savage sentence]
-Potential → [real KSh, users, gigs, stars]"""
-    
+• [Tool] → [url]
+• [Tool] → [url]
+• [Tool] → [url]
+Why now → [one brutal truth sentence]
+Potential → [realistic KSh, users, gigs, GitHub stars, or portfolio power]"""
+
     response = ollama.generate(model=MODEL, prompt=prompt)
     return response["response"]
 
@@ -72,13 +72,26 @@ def send_telegram(message: str):
         "disable_web_page_preview": True
     }
     try:
-        requests.post(url, data=payload, timeout=10)
-        print("✅ Ping sent")
+        resp = requests.post(url, data=payload, timeout=15)
+        if resp.status_code == 200:
+            print("✅ Ping sent to Telegram")
+        else:
+            print(f"⚠️ Telegram returned {resp.status_code}: {resp.text}")
+    except requests.exceptions.Timeout:
+        print("❌ Telegram timeout after 15s")
     except Exception as e:
         print(f"❌ Telegram failed: {e}")
 
 if __name__ == "__main__":
-    idea = generate_idea()
-    message = f"*FocusLock • PC Edition*\n{datetime.now().strftime('%b %d • %H:%M')} EAT\n\n{idea}"
-    send_telegram(message)
-    log_activity("Delivered clean project idea (no commands, links only)")
+    try:
+        print("🔥 FocusLock starting...")
+        idea = generate_idea()
+        timestamp = datetime.now().strftime('%b %d • %H:%M') 
+        message = f"*FocusLock • PC Edition*\n{timestamp} EAT\n\n{idea}"
+        
+        send_telegram(message)
+        log_activity("Delivered project with Problem Statement + clean stack")
+        print("✅ FocusLock complete")
+    except Exception as e:
+        print(f"❌ FocusLock crashed: {e}")
+        raise
