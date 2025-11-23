@@ -1,7 +1,8 @@
 requests==2.31.0
 chromadb==0.4.24
 ollama==0.1.7
-sentence-transformers==3.0.1
-transformers==4.45.2  # Matches Torch 2.4 compat
 torch==2.4.1
+transformers==4.36.2
+huggingface-hub==0.20.3
+sentence-transformers==3.0.1
 python-dotenv==1.0.0
