@@ -15,6 +15,8 @@ MODEL = "phi3:mini"
 os.makedirs("data", exist_ok=True)
 HISTORY_FILE = "data/history.json"
 
+# Remove the unused embedding function initialization that was on line 19
+
 if os.path.exists(HISTORY_FILE):
     with open(HISTORY_FILE, "r") as f:
         history = json.load(f)
