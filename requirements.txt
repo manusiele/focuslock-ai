@@ -1,3 +1,9 @@
 requests==2.31.0
+chromadb==0.4.24
 ollama==0.1.7
+torch==2.4.1 --index-url https://download.pytorch.org/whl/cpu
+transformers==4.36.0
+huggingface-hub==0.20.3
+sentence-transformers==3.0.1
 python-dotenv==1.0.0
+numpy==1.26.4  # Prevents any NumPy float_ ghosts
