@@ -45,10 +45,10 @@ Recent vibe:
 Generate exactly ONE focused project idea with this EXACT format (no extra text, no greetings):
 
 PROBLEM STATEMENT
-Who → [exact audience, e.g. Kenyan freelancers, junior devs in Nairobi]
-Pain → [the real struggle they face daily]
-Gap → [what's missing in the market right now]
-Impact if unsolved → [career, money, or time lost]
+Who → [People trying to build or grow modern businesses across Africa. This includes agritech innovators, agrotech startups, smallholder-focused platforms, fintech creators, digital freelancers, junior developers, micro-SME owners, content creators, e-commerce sellers, and tech-curious youth stepping into the digital economy. ]
+Pain → [They wrestle with scattered information, outdated tools, slow manual workflows, limited market access, unreliable data, and lack of affordable digital support. Every task feels like pushing a heavy cart through wet soil: slow, repetitive, and draining. Most spend hours figuring out what should take minutes.]
+Gap → [There’s no unified, affordable, intelligent system that simplifies their operations, automates routine tasks, gives reliable insights, and supports growth across sectors. Existing solutions are either too expensive, too generic, too technical, or not built for the African business environment.]
+Impact if unsolved → [They lose money through inefficiency, waste time that could grow their business, miss opportunities due to poor data, struggle to scale, and remain stuck in survival mode instead of growth mode. Careers stall, businesses plateau, and innovation slows]
 
 Project → [badass, memorable name]
 Stack → [exact tools only, e.g. Next.js + Supabase + Vercel]
