@@ -47,7 +47,7 @@ Generate exactly ONE focused project idea with this EXACT format (no extra text,
 PROBLEM STATEMENT
 Who → [People trying to build or grow modern businesses across Africa. This includes agritech innovators, agrotech startups, smallholder-focused platforms, fintech creators, digital freelancers, junior developers, micro-SME owners, content creators, e-commerce sellers, and tech-curious youth stepping into the digital economy. ]
 Pain → [They wrestle with scattered information, outdated tools, slow manual workflows, limited market access, unreliable data, and lack of affordable digital support. Every task feels like pushing a heavy cart through wet soil: slow, repetitive, and draining. Most spend hours figuring out what should take minutes.]
-Gap → [There’s no unified, affordable, intelligent system that simplifies their operations, automates routine tasks, gives reliable insights, and supports growth across sectors. Existing solutions are either too expensive, too generic, too technical, or not built for the African business environment.]
+Gap → [There's no unified, affordable, intelligent system that simplifies their operations, automates routine tasks, gives reliable insights, and supports growth across sectors. Existing solutions are either too expensive, too generic, too technical, or not built for the African business environment.]
 Impact if unsolved → [They lose money through inefficiency, waste time that could grow their business, miss opportunities due to poor data, struggle to scale, and remain stuck in survival mode instead of growth mode. Careers stall, businesses plateau, and innovation slows]
 
 Project → [badass, memorable name]
@@ -87,7 +87,7 @@ if __name__ == "__main__":
         print("🔥 FocusLock starting...")
         idea = generate_idea()
         timestamp = datetime.now().strftime('%b %d • %H:%M') 
-        message = f"*FocusLock • PC Edition*\n{timestamp} EAT\n\n{idea}"
+        message = f"*FocusLock • Daily Spark*\n{timestamp} EAT\n\n{idea}\n\n_Next idea: Tomorrow at 10:00 AM EAT_"
         
         send_telegram(message)
         log_activity("Delivered project with Problem Statement + clean stack")
