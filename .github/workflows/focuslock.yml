@@ -1,57 +1,72 @@
-name: FocusLock AI Agent
-
+name: FocusLock Daily Spark
 on:
   schedule:
-    # Every 2 hours (UTC; adjust cron for your TZ, e.g., '0 */2 8-22 * * *' for 8am-10pm)
-    - cron: '0 */2 * * *'
+    # Runs at 07:00 UTC (10:00 AM EAT) - Once daily
+    - cron: '0 7 * * *'
   workflow_dispatch:  # Manual trigger from GitHub UI
-  # Optional: Trigger on issues/PR comments with /next (add below if wanted)
-  # issue_comment:
-  #   types: [created]
 
 jobs:
   generate-idea:
     runs-on: ubuntu-latest
     permissions:
       contents: write  # For auto-commit
-
+    
     steps:
     - name: Checkout repo
       uses: actions/checkout@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-
+    
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
-
+        cache: 'pip'  # Cache dependencies
+    
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-
-    - name: Install Ollama
-      run: curl -fsSL https://ollama.com/install.sh | sh
-
-    - name: Pull Phi-3 model (first run only, caches)
-      run: ollama pull phi3:mini
-
+    
+    - name: Install & Start Ollama
+      run: |
+        curl -fsSL https://ollama.com/install.sh | sh
+        ollama serve &
+        sleep 5  # Wait for Ollama to start
+    
+    - name: Pull Phi-3 model
+      run: |
+        ollama pull phi3:mini
+        echo "✅ Model ready"
+    
     - name: Run FocusLock
       env:
         TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
         CHAT_ID: ${{ secrets.CHAT_ID }}
-      run: python focuslock.py
-
-    - name: Commit updated history/DB
       run: |
-        git config --local user.email "action@github.com"
+        echo "🔥 Starting FocusLock..."
+        python focuslock.py
+        echo "✅ FocusLock complete"
+    
+    - name: Commit updated history
+      run: |
+        git config --local user.email "focuslock-bot@github.com"
         git config --local user.name "FocusLock Bot"
-        git add data/
+        git add data/history.json
         if git diff --staged --quiet; then
-          echo "No changes to commit"
+          echo "ℹ️ No changes to commit"
         else
-          git commit -m "Update activity history [auto]"
+          TIMESTAMP=$(date +'%Y-%m-%d %H:%M EAT')
+          git commit -m "📝 Daily spark delivered: $TIMESTAMP"
           git push
+          echo "✅ History updated"
         fi
-      continue-on-error: true  # If no changes, skip
+      continue-on-error: true
+    
+    - name: Job Summary
+      if: always()
+      run: |
+        echo "## 🔥 FocusLock Daily Report" >> $GITHUB_STEP_SUMMARY
+        echo "- **Time:** $(date +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+        echo "- **Status:** ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Next run:** Tomorrow at 10:00 AM EAT" >> $GITHUB_STEP_SUMMARY
